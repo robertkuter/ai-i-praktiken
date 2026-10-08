@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Ditt nästa AI-experiment</title>
 <meta name="description" content="En kort självreflektion för bolagsjurister: hur du arbetar med AI i dag och ett konkret nästa experiment.">
-<!-- Status: v0.7-working · owner: Robert Kuter · build lab, not yet promoted -->
+<!-- Status: v0.8-working · owner: Robert Kuter · build lab, not yet promoted -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
@@ -314,7 +314,7 @@
 
 <main class="wrap">
   <form id="quiz" novalidate>
-    <p class="intro muted">Frågor märkta <span class="part-tag seminar">Grunden</span> bygger på seminariet <em>AI i bolagsjuristens vardag</em>. Deltagarmaterialet finns <a href="https://business.legalworks.se/nedladdning" target="_blank" rel="noopener">hos LegalWorks</a> om du inte var där. Frågor märkta <span class="part-tag course">Kursen</span> handlar om det som kursen övar på.</p>
+    <p class="intro muted">Frågor märkta <span class="part-tag seminar">Grunden</span> bygger på seminariet <em>AI i bolagsjuristens vardag</em>. Deltagarmaterialet finns <a href="https://business.legalworks.se/nedladdning" target="_blank" rel="noopener">hos LegalWorks</a> om du inte var där. Frågor märkta <span class="part-tag course">Kursen</span> handlar om det som övas i kursen <a id="intro-course-link" href="https://nordiclegaltechday.com/academy-kurs-ai-i-praktiken-for-bolagsjurister/" target="_blank" rel="noopener"><em>AI i praktiken för bolagsjurister</em></a>, tre tillfällen hos LegalWorks i oktober och november.</p>
     <div id="questions"></div>
     <div class="submit-row">
       <button type="submit" id="submit" disabled>Visa mitt resultat</button>
@@ -373,7 +373,7 @@
       <aside class="course" aria-labelledby="course-h">
         <h2 id="course-h">Om du vill öva på en egen uppgift</h2>
         <p class="title"><em>AI i praktiken för bolagsjurister</em></p>
-        <p>En kurs hos LegalWorks med tre tillfällen. Du tar med dig en återkommande uppgift, gärna en där AI inte räckte till, och går därifrån med ett arbetssätt som du har testat.</p>
+        <p>En kurs hos LegalWorks med tre tillfällen. Du tar med dig en återkommande uppgift, gärna en där AI inte räckte till, och går därifrån med ett arbetssätt som du har testat. Förberedda övningsfall gör att alla kommer igång direkt, även utan en egen uppgift. Vi tittar också på hur ett arbetssätt kan sparas i verktygen, så att det går att använda igen.</p>
         <ul class="dates">
           <li>28 okt</li>
           <li>4 nov</li>
@@ -400,24 +400,25 @@
 const CONFIG = {
   contactEmail: "robert.kuter@legalworks.se",
   courseUrl: "https://nordiclegaltechday.com/academy-kurs-ai-i-praktiken-for-bolagsjurister/",
-  version: "v0.7"
+  version: "v0.8"
 };
 
 // part: "seminar" = the free seminar's four questions; "course" = what the paid course adds.
-// Each question is a checklist. Items carry a hidden weight w (0–2); the person never sees it.
-// Score per area = sum of ticked weights → 0 = "first steps", 1–2 = "some", 3+ = "several moves".
-// "none" is an honest out ("the task didn't need it") and is excluded from scoring.
-// Array order = tie-break order when choosing the next experiment.
+// Each question is a checklist in a fixed, deliberately mixed order (no weight pattern).
+// Items carry a hidden weight w (0–2); the person never sees it.
+// Score per area = sum of ticked weights → 0 = level 0, 1–2 = level 1, 3+ = level 2.
+// "none" is an honest out, excluded from scoring, unless zero: true (then it scores 0).
+// Array order of DIMENSIONS = tie-break order when choosing the next experiment.
 const DIMENSIONS = [
   {
     id: "kontrollen", name: "Kontrollen", part: "seminar",
     question: "Vad gjorde du innan du använde resultatet?",
     items: [
-      { t: "Läste igenom svaret", s: "läste igenom", w: 0 },
       { t: "Öppnade källan och jämförde", s: "jämförde med källan", w: 1 },
+      { t: "Läste igenom svaret", s: "läste igenom", w: 0 },
       { t: "Kontrollerade siffror, datum, definitioner eller hänvisningar", s: "kontrollerade detaljer", w: 2 },
-      { t: "Bestämde innan jag läste vad som måste stämma", s: "bestämde kontrollen i förväg", w: 2 },
-      { t: "Bad en kollega titta på det", s: "kollega tittade", w: 1 }
+      { t: "Lät en kollega läsa igenom", s: "en kollega läste igenom", w: 1 },
+      { t: "Bestämde i förväg vad som måste stämma", s: "bestämde kontrollen i förväg", w: 2 }
     ],
     none: { t: "Inget särskilt, uppgiften krävde ingen särskild kontroll", s: "behövdes inte" }
   },
@@ -425,11 +426,11 @@ const DIMENSIONS = [
     id: "samtalet", name: "Samtalet", part: "course",
     question: "När det första svaret inte räckte, vad gjorde du då?",
     items: [
-      { t: "Gjorde klart själv, det gick fortare", s: "gjorde klart själv", w: 0 },
-      { t: "Skrev en ny fråga", s: "ny fråga", w: 0 },
       { t: "Bad om en ny version", s: "bad om ny version", w: 1 },
       { t: "Förklarade mer eller sa emot", s: "förklarade mer eller sa emot", w: 2 },
-      { t: "Bad den ställa frågor till mig", s: "lät den fråga mig", w: 2 }
+      { t: "Gjorde klart själv, det gick fortare", s: "gjorde klart själv", w: 0 },
+      { t: "Bad den ställa frågor till mig", s: "lät den fråga mig", w: 2 },
+      { t: "Skrev en ny fråga", s: "ny fråga", w: 0 }
     ],
     none: { t: "Det första svaret räckte", s: "första svaret räckte" }
   },
@@ -437,10 +438,10 @@ const DIMENSIONS = [
     id: "fordelningen", name: "Fördelningen", part: "course",
     question: "Hur delade du upp arbetet mellan dig och AI?",
     items: [
-      { t: "Gav den hela uppgiften", s: "hela uppgiften", w: 0 },
       { t: "Valde ut en del som verkade passa", s: "valde ut en del", w: 1 },
-      { t: "Gjorde en del av arbetet själv", s: "behöll en del själv", w: 1 },
+      { t: "Gav den hela uppgiften", s: "hela uppgiften", w: 0 },
       { t: "Tänkte igenom vad som inte fick bli fel", s: "tänkte på vad som inte fick bli fel", w: 2 },
+      { t: "Gjorde en del av arbetet själv", s: "behöll en del själv", w: 1 },
       { t: "Använde AI för att pröva min egen bedömning", s: "prövade min bedömning", w: 2 }
     ],
     none: { t: "Inget särskilt, jag ville se vad verktyget kunde göra", s: "ville se vad verktyget kunde" }
@@ -449,21 +450,21 @@ const DIMENSIONS = [
     id: "uppdraget", name: "Uppdraget", part: "seminar",
     question: "Vad berättade du för AI om uppgiften?",
     items: [
-      { t: "Ställde en kort fråga", s: "kort fråga", w: 0 },
       { t: "Vad resultatet skulle användas till", s: "syftet", w: 1 },
       { t: "Sammanhanget eller bakgrunden", s: "sammanhanget", w: 1 },
-      { t: "Vem resultatet var till för", s: "mottagaren", w: 1 },
-      { t: "Hur ett bra svar skulle se ut", s: "hur ett bra svar ser ut", w: 1 }
+      { t: "Vad jag själv trodde om saken", s: "min egen bedömning", w: 1 },
+      { t: "Hur ett bra svar skulle se ut", s: "hur ett bra svar ser ut", w: 1 },
+      { t: "Vem resultatet var till för", s: "mottagaren", w: 1 }
     ],
-    none: { t: "Inget särskilt, frågan krävde ingen extra styrning", s: "inget särskilt" }
+    none: { t: "Inget särskilt, bara själva frågan", s: "bara frågan", zero: true }
   },
   {
     id: "kallorna", name: "Källorna", part: "seminar",
     question: "Vilka källor arbetade AI med?",
     items: [
       { t: "Det den redan visste", s: "egen kunskap", w: 0 },
-      { t: "Text som jag klistrade in eller laddade upp", s: "eget underlag", w: 1 },
-      { t: "Bara de källor jag pekade ut", s: "avgränsade källor", w: 2 },
+      { t: "Text som jag klistrade in eller laddade upp, till exempel ett avtal eller ett lagrum", s: "eget underlag", w: 1 },
+      { t: "Bara de källor jag pekade ut, till exempel vårt avtal och en viss lag", s: "avgränsade källor", w: 2 },
       { t: "Jag bad om hänvisningar till var det står", s: "hänvisningar", w: 1 },
       { t: "Jag sa vad som var bekräftat och vad som inte var det", s: "skilde bekräftat från obekräftat", w: 2 }
     ],
@@ -473,37 +474,37 @@ const DIMENSIONS = [
     id: "beslutet", name: "Beslutet", part: "course",
     question: "Vad gjorde du med resultatet?",
     items: [
-      { t: "Använde det i stort sett som det var", s: "använde som det var", w: 0 },
-      { t: "Rättade eller kompletterade det", s: "rättade eller kompletterade", w: 1 },
+      { t: "Använde resultatet i stort sett oförändrat", s: "använde oförändrat", w: 0 },
       { t: "Strök det som inte höll", s: "strök det som inte höll", w: 1 },
       { t: "Höll inne något eller tog det vidare till någon annan", s: "höll inne eller tog vidare", w: 2 },
+      { t: "Rättade eller kompletterade det", s: "rättade eller kompletterade", w: 1 },
       { t: "Skrev om det med egna ord", s: "skrev om", w: 1 }
     ],
-    none: { t: "Resultatet användes inte till slut", s: "användes inte" }
+    none: { t: "Resultatet har inte kommit till användning än", s: "inte använt än" }
   },
   {
     id: "arbetsunderlaget", name: "Arbetsunderlaget", part: "seminar",
     question: "I vilken form fick du svaret?",
     items: [
-      { t: "Löpande text", s: "löptext", w: 0 },
       { t: "Punkter eller rubriker", s: "punkter", w: 1 },
-      { t: "En tabell med en rad per punkt", s: "tabell", w: 1 },
+      { t: "Löpande text", s: "löptext", w: 0 },
       { t: "Med källa eller hänvisning för varje punkt", s: "källa per punkt", w: 2 },
+      { t: "En tabell med en rad per punkt", s: "tabell", w: 1 },
       { t: "Med markering av vad som var osäkert eller saknades", s: "markerad osäkerhet", w: 2 }
     ],
     none: { t: "Formatet spelade ingen roll", s: "formatet spelade ingen roll" }
   },
   {
     id: "arbetssattet", name: "Arbetssättet", part: "course",
-    question: "Vad har du kvar till nästa gång?",
+    question: "Vad tar du med dig till nästa liknande uppgift?",
     items: [
-      { t: "Ingenting, jag börjar om", s: "börjar om", w: 0 },
       { t: "Frågan eller instruktionen som fungerade", s: "sparad instruktion", w: 1 },
+      { t: "Inget särskilt, jag börjar om nästa gång", s: "börjar om", w: 0 },
+      { t: "Något som kollegor också använder", s: "delas med kollegor", w: 2 },
       { t: "En anteckning om vad som inte fungerade", s: "anteckning om vad som brast", w: 1 },
-      { t: "En mall som jag har förbättrat", s: "förbättrad mall", w: 2 },
-      { t: "Något som kollegor också använder", s: "delas med kollegor", w: 2 }
+      { t: "En mall som jag har förbättrat", s: "förbättrad mall", w: 2 }
     ],
-    none: { t: "Det var en engångsuppgift", s: "engångsuppgift" }
+    none: { t: "För tidigt att säga, uppgiften pågår fortfarande", s: "pågår fortfarande" }
   }
 ];
 
@@ -605,7 +606,7 @@ const EXPERIMENTS = {
   },
   arbetssattet: {
     title: "Spara det som fungerade",
-    why: "En instruktion som har fungerat en gång är början på ett arbetssätt. Varje användning gör den bättre.",
+    why: "En instruktion som har fungerat en gång är början på ett arbetssätt. Varje användning gör den bättre. Det är också den som verktygens nyare funktioner bygger på, som projekt, egna assistenter och skills. Har du en instruktion som fungerar kan du ta den med dig dit, i vilket verktyg du än använder.",
     steps: [
       "Nästa gång en instruktion fungerar: spara den som en mall med platshållare för det som varierar.",
       "Använd mallen på nästa liknande uppgift.",
@@ -639,15 +640,8 @@ function option(name, value, text, quiet, type = "radio") {
   return `<label class="opt${quiet ? " quiet" : ""}"><input type="${type}" id="${name}-${value}" name="${name}" value="${value}"><span class="mark${type === "checkbox" ? " box" : ""}" aria-hidden="true"></span><span>${esc(text)}</span></label>`;
 }
 
-// Random order per visit so position never hints at a "right" answer; the honest out stays last.
-function shuffled(arr) {
-  const a = arr.map((x, i) => [x, i]);
-  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
-  return a;
-}
-
 function checklist(n, d) {
-  const opts = shuffled(d.items).map(([it, i]) => option(d.id, i, it.t, false, "checkbox")).join("") +
+  const opts = d.items.map((it, i) => option(d.id, i, it.t, false, "checkbox")).join("") +
     option(d.id, "none", d.none.t, true, "checkbox");
   return `<fieldset class="q" id="q-${d.id}">
     <legend><span class="clause"><span class="sect">§&nbsp;${n}</span> ${esc(d.name)} <span class="part-tag ${d.part}">${PART_LABEL[d.part]}</span></span><span class="q-text">${esc(d.question)}</span><span class="q-hint">Välj allt som stämmer.</span></legend>
@@ -725,7 +719,8 @@ function updateProgress() {
 // 0 → level 0, 1–2 → level 1, 3 or more → level 2. "none" (or unanswered) → null, not scored.
 function score(a, id) {
   const v = a[id];
-  if (!v || v.includes("none")) return null;
+  if (!v) return null;
+  if (v.includes("none")) return byId[id].none.zero ? 0 : null;
   return v.reduce((sum, i) => sum + byId[id].items[Number(i)].w, 0);
 }
 function level(a, id) {
