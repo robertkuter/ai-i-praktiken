@@ -477,9 +477,10 @@ const DIMENSIONS = [
     items: [
       { t: "Använde resultatet i stort sett oförändrat", s: "använde oförändrat", w: 0 },
       { t: "Strök det som inte höll", s: "strök det som inte höll", w: 1 },
-      { t: "Höll inne något eller tog det vidare till någon annan", s: "höll inne eller tog vidare", w: 2 },
+      { t: "Lämnade bara vidare det jag kunde stå för", s: "lämnade bara vidare det jag kunde stå för", w: 2 },
       { t: "Rättade eller kompletterade det", s: "rättade eller kompletterade", w: 1 },
-      { t: "Skrev om det med egna ord", s: "skrev om", w: 1 }
+      { t: "Skrev om det med egna ord", s: "skrev om", w: 1 },
+      { t: "Lyfte en del till någon annan för bedömning", s: "lyfte en del vidare", w: 2 }
     ],
     none: { t: "Resultatet har inte kommit till användning än", s: "inte använt än" }
   },
@@ -600,8 +601,8 @@ const EXPERIMENTS = {
     title: "Fatta beslutet uttryckligen",
     why: "Kontrollen visar vad som stämmer. Beslutet om vad som lämnas vidare är fortfarande ditt.",
     steps: [
-      "Sortera resultatet i tre högar: använd, ändra, och håll inne eller lyft till någon annan.",
-      "Skriv en mening om varför för det du håller inne.",
+      "Sortera resultatet i tre högar: använd, ändra, och sådant du inte kan stå för eller behöver lyfta till någon annan.",
+      "Skriv en mening om varför, för det du inte lämnar vidare.",
       "Fundera på vad AI hade behövt veta för att högen ”ändra” skulle bli mindre."
     ]
   },
